@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-10 px-4">
+  <div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+          📜 Message History
+        </h1>
+        <p class="text-gray-500 text-sm">View your sent, received, and log details all in one place.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex mt-4 sm:mt-0 gap-2">
+        <button id="sentBtn"
+          class="tab-btn bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-medium shadow hover:bg-blue-700 transition">Sent</button>
+        <button id="receivedBtn"
+          class="tab-btn bg-gray-200 text-gray-700 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition">Received</button>
+        <button id="logsBtn"
+          class="tab-btn bg-gray-200 text-gray-700 px-5 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition">Logs</button>
+      </div>
+    </div>
+
+    <!-- Sent Section -->
+    <div id="sentSection" class="tab-section space-y-6">
+      {% if sent %}
+        {% for m, rec in sent %}
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-4">
+            <div class="bg-blue-100 p-3 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m0 8H3" /></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800">{{ m.filename }}</h3>
+              <p class="text-sm text-gray-600">To: <strong>{{ rec.username }}</strong></p>
+              <p class="text-xs text-gray-400">{{ m.created_at }}</p>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4 sm:mt-0">
+            <a href="#" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm shadow">View</a>
+            <a href="#" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition text-sm shadow">Download</a>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-gray-500">No sent messages available.</p>
+      {% endif %}
+    </div>
+
+    <!-- Received Section -->
+    <div id="receivedSection" class="tab-section hidden space-y-6">
+      {% if received %}
+        {% for m, snd in received %}
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-100 rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-4">
+            <div class="bg-green-100 p-3 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 4v16h16V4H4z" /></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800">{{ m.filename }}</h3>
+              <p class="text-sm text-gray-600">From: <strong>{{ snd.username }}</strong></p>
+              <p class="text-xs text-gray-400">{{ m.created_at }}</p>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-4 sm:mt-0">
+            <a href="#" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm shadow">View</a>
+            <a href="#" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition text-sm shadow">Download</a>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-gray-500">No received messages available.</p>
+      {% endif %}
+    </div>
+
+    <!-- Logs Section -->
+    <div id="logsSection" class="tab-section hidden space-y-6">
+      {% if logs %}
+        {% for l in logs %}
+        <div class="bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-100 rounded-xl p-6 flex items-center justify-between shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-4">
+            <div class="bg-yellow-100 p-3 rounded-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v13a2 2 0 01-2 2z" /></svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800">{{ l.file_type|upper }}</h3>
+              <p class="text-sm text-gray-600">Sender: {{ l.sender }} → Receiver: {{ l.receiver }}</p>
+              <p class="text-xs text-gray-400">{{ l.timestamp }}</p>
+            </div>
+          </div>
+          <div>
+            <a href="#" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition text-sm shadow">View Log</a>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-gray-500">No logs available.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = {
+    sentBtn: document.getElementById("sentBtn"),
+    receivedBtn: document.getElementById("receivedBtn"),
+    logsBtn: document.getElementById("logsBtn"),
+    sentSection: document.getElementById("sentSection"),
+    receivedSection: document.getElementById("receivedSection"),
+    logsSection: document.getElementById("logsSection")
+  };
+
+  function showTab(tab) {
+    ["sentSection", "receivedSection", "logsSection"].forEach(s =>
+      tabs[s].classList.add("hidden")
+    );
+    tabs[`${tab}Section`].classList.remove("hidden");
+
+    ["sentBtn", "receivedBtn", "logsBtn"].forEach(b => {
+      tabs[b].classList.remove("bg-blue-600", "text-white");
+      tabs[b].classList.add("bg-gray-200", "text-gray-700");
+    });
+    tabs[`${tab}Btn`].classList.add("bg-blue-600", "text-white");
+    tabs[`${tab}Btn`].classList.remove("bg-gray-200", "text-gray-700");
+  }
+
+  tabs.sentBtn.addEventListener("click", () => showTab("sent"));
+  tabs.receivedBtn.addEventListener("click", () => showTab("received"));
+  tabs.logsBtn.addEventListener("click", () => showTab("logs"));
+</script>
+{% endblock %}

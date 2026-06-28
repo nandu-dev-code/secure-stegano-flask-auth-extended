@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>StegoApp — Secure Steganography</title>
+
+  <!-- Fonts & Tailwind -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo a {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: #111827;
+    }
+
+    nav a {
+      color: #374151;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: #2563eb;
+    }
+
+    footer {
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      color: #6b7280;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+    }
+
+    footer strong {
+      color: #2563eb;
+    }
+
+    @media (max-width: 768px) {
+      nav.desktop-nav {
+        display: none;
+      }
+    }
+
+    /* Drawer Animations */
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes slideOutRight {
+      from { transform: translateX(0); }
+      to { transform: translateX(100%); }
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.3s ease-out forwards;
+    }
+
+    .slide-out-right {
+      animation: slideOutRight 0.3s ease-in forwards;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="logo">
+        <a href="{{ url_for('dashboard') }}">Stego<span>App</span></a>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="desktop-nav flex items-center gap-4">
+        {% if current_user.is_authenticated %}
+          <span class="text-gray-500 text-sm">Hi, <strong>{{ current_user.username }}</strong></span>
+          <a href="{{ url_for('dashboard') }}">Dashboard</a>
+          <a href="{{ url_for('inbox') }}">Inbox</a>
+          <a href="{{ url_for('history') }}">History</a>
+          <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('signup') }}">Sign Up</a>
+        {% endif %}
+      </nav>
+
+      <!-- Mobile Toggle -->
+      <button id="menuToggle" class="text-2xl text-blue-600 md:hidden focus:outline-none">☰</button>
+    </div>
+  </header>
+
+  <!-- Overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+
+  <!-- Drawer Menu (Right Side) -->
+  <nav id="mobileNav" class="fixed top-[60px] right-0 w-[70%] bg-white border-l border-gray-200 shadow-2xl hidden flex-col md:hidden z-40 h-auto rounded-l-2xl overflow-hidden">
+    {% if current_user.is_authenticated %}
+      <a href="{{ url_for('dashboard') }}" class="px-5 py-3 border-b hover:bg-blue-50 flex items-center gap-3">
+        <span>🏠</span> Dashboard
+      </a>
+      <a href="{{ url_for('inbox') }}" class="px-5 py-3 border-b hover:bg-blue-50 flex items-center gap-3">
+        <span>📥</span> Inbox
+      </a>
+      <a href="{{ url_for('history') }}" class="px-5 py-3 border-b hover:bg-blue-50 flex items-center gap-3">
+        <span>📜</span> History
+      </a>
+      <a href="{{ url_for('logout') }}" class="px-5 py-3 hover:bg-blue-50 flex items-center gap-3">
+        <span>🚪</span> Logout
+      </a>
+    {% else %}
+      <a href="{{ url_for('login') }}" class="px-5 py-3 border-b hover:bg-blue-50 flex items-center gap-3">
+        <span>🔑</span> Login
+      </a>
+      <a href="{{ url_for('signup') }}" class="px-5 py-3 hover:bg-blue-50 flex items-center gap-3">
+        <span>📝</span> Sign Up
+      </a>
+    {% endif %}
+  </nav>
+
+  <!-- Main Section -->
+  <main class="container max-w-6xl mx-auto px-4 py-6 flex-1">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for m in messages %}
+          <div class="flash bg-yellow-50 border-l-4 border-yellow-400 text-yellow-900 p-3 rounded mb-3">{{ m }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    Built with ❤️ by <strong>Nandu and team</strong><br>
+    © 2025 StegoApp. All rights reserved.
+  </footer>
+
+  <!-- JS for Drawer Menu -->
+  <script>
+    const toggle = document.getElementById('menuToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const overlay = document.getElementById('overlay');
+    let open = false;
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!open) {
+        mobileNav.classList.remove('hidden', 'slide-out-right');
+        mobileNav.classList.add('slide-in-right');
+        overlay.classList.remove('hidden');
+        open = true;
+      } else {
+        closeMenu();
+      }
+    });
+
+    function closeMenu() {
+      mobileNav.classList.remove('slide-in-right');
+      mobileNav.classList.add('slide-out-right');
+      overlay.classList.add('hidden');
+      setTimeout(() => mobileNav.classList.add('hidden'), 300);
+      open = false;
+    }
+
+    overlay.addEventListener('click', closeMenu);
+
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  </script>
+</body>
+</html>

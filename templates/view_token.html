@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OTP Verification — StegoApp</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #f8fafc, #eef2ff);
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    }
+    .input {
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+      outline: none;
+    }
+    .btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      font-weight: 500;
+      width: 100%;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+    .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+    .logo-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e3a8a;
+      letter-spacing: -0.5px;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  <div class="w-full max-w-md card p-8 text-center">
+    <div class="mb-6">
+      <div class="logo-text mb-2">StegoApp</div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-2">Verify Message Access</h2>
+      <p class="text-gray-500 text-sm">Enter the OTP and your password to unlock the hidden message securely.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-4">
+          {% for category, msg in messages %}
+            <p class="text-{{ 'red' if category=='danger' else 'green' }}-600 font-medium">{{ msg }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="text-left">
+      <label class="block text-gray-700 text-sm font-medium mb-2">OTP Code</label>
+      <input type="text" name="otp" placeholder="Enter OTP" required class="input mb-4">
+
+      <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+      <input type="password" name="password" placeholder="Enter Password" required class="input mb-6">
+
+      <button type="submit" class="btn">Verify & View Message</button>
+    </form>
+
+    <footer class="mt-6 text-xs text-gray-500">
+      © 2025 StegoApp — Secure by Design 🔒
+    </footer>
+  </div>
+</body>
+</html>

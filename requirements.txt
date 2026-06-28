@@ -1,0 +1,9 @@
+Flask==3.0.3
+Flask-Login==0.6.3
+Flask-SQLAlchemy==3.1.1
+PyMySQL==1.1.0
+cryptography==43.0.1
+Pillow==10.4.0
+soundfile==0.12.1
+opencv-python==4.8.0.76
+numpy==1.25.2

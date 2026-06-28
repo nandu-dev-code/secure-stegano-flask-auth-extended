@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="dashboard">
+  <!-- Welcome Section -->
+  <div class="welcome">
+    <h2>Welcome to <span class="highlight">StegoApp</span></h2>
+    <p>Empowering your privacy with next-gen, AI-driven steganography — securely hide your data in images, audio, and video files.</p>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="action-grid">
+    <div class="action-card">
+      <div class="icon">🖼️</div>
+      <h3>Image Steganography</h3>
+      <p>Embed encrypted messages securely inside image files.</p>
+      <a href="{{ url_for('embed_image') }}" class="btn-primary">Embed Image</a>
+    </div>
+
+    <div class="action-card">
+      <div class="icon">🎵</div>
+      <h3>Audio Steganography</h3>
+      <p>Conceal your secret text inside audio files with AES encryption.</p>
+      <a href="{{ url_for('embed_audio') }}" class="btn-primary">Embed Audio</a>
+    </div>
+
+    <div class="action-card">
+      <div class="icon">🎬</div>
+      <h3>Video Steganography</h3>
+      <p>Protect sensitive data inside videos with layered security.</p>
+      <a href="{{ url_for('embed_video') }}" class="btn-primary">Embed Video</a>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="about">
+    <h3>About <span class="highlight">StegoApp</span></h3>
+    <p>
+      <strong>StegoApp</strong> offers secure and intelligent steganography powered by modern encryption.  
+      Our platform ensures data confidentiality and effortless sharing using QR-based secure verification.
+    </p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <span>🔐</span>
+        <h4>End-to-End Security</h4>
+        <p>Every message is AES-encrypted and hidden using multi-layered encoding.</p>
+      </div>
+
+      <div class="info-card">
+        <span>⚡</span>
+        <h4>Real-Time Processing</h4>
+        <p>Embed and extract securely in seconds without compromising performance.</p>
+      </div>
+
+      <div class="info-card">
+        <span>📱</span>
+        <h4>Fully Responsive</h4>
+        <p>Optimized for every device — seamless usability on mobile and desktop.</p>
+      </div>
+
+      <div class="info-card">
+        <span>💡</span>
+        <h4>Smart & Intuitive</h4>
+        <p>Modern UI with minimal design — built for professionals and creators alike.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.dashboard {
+  background: linear-gradient(135deg, #f9fafb, #eef2ff);
+  min-height: calc(100vh - 120px);
+  padding: 2.5rem 1.5rem 4rem;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Smooth entry animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Welcome section */
+.welcome {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+.welcome h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+.welcome .highlight {
+  color: #2563eb;
+}
+.welcome p {
+  color: #4b5563;
+  margin-top: 0.75rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Action Cards */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.action-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+.action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+.action-card .icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+.action-card h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2563eb;
+}
+.action-card p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 1rem;
+}
+.btn-primary {
+  display: inline-block;
+  background: linear-gradient(to right, #2563eb, #1e40af);
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.6rem 1.3rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(37,99,235,0.25);
+}
+.btn-primary:hover {
+  background: #1e3a8a;
+  box-shadow: 0 6px 16px rgba(37,99,235,0.35);
+}
+
+/* About Section */
+.about {
+  margin-top: 3rem;
+  background: white;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  text-align: center;
+}
+.about h3 {
+  font-size: 1.6rem;
+  color: #1e3a8a;
+  font-weight: 700;
+}
+.about p {
+  color: #374151;
+  max-width: 780px;
+  margin: 0.75rem auto 1.5rem;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* Info Cards */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+}
+.info-card {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+}
+.info-card span {
+  font-size: 1.8rem;
+  color: #2563eb;
+}
+.info-card h4 {
+  margin-top: 0.5rem;
+  color: #111827;
+  font-weight: 600;
+}
+.info-card p {
+  margin-top: 0.3rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .dashboard { padding: 1.5rem 1rem 3rem; }
+  .welcome h2 { font-size: 1.5rem; }
+  .action-card { padding: 1.2rem; }
+  .about h3 { font-size: 1.3rem; }
+}
+</style>
+
+{% endblock %}

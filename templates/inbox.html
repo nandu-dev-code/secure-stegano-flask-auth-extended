@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="inbox-container">
+  <h2 class="inbox-title">📥 Your Inbox</h2>
+  <p class="inbox-subtitle">View and extract hidden messages securely sent to you.</p>
+
+  {% if messages %}
+    <div class="inbox-list">
+      {% for m, u in messages %}
+        <div class="inbox-item">
+          <div class="inbox-info">
+            <span class="type-tag {{ m.media_type }}">{{ m.media_type|upper }}</span>
+            <div class="details">
+              <div class="file-name">{{ m.filename }}</div>
+              <div class="sender">From: <strong>{{ u.username if u else 'Unknown' }}</strong></div>
+            </div>
+          </div>
+          <div class="actions">
+            {% if m.media_type == 'image' %}
+              <a href="{{ url_for('extract_view', mid=m.id) }}" class="btn-action">Extract</a>
+            {% elif m.media_type == 'audio' %}
+              <a href="{{ url_for('extract_audio', mid=m.id) }}" class="btn-action">Extract</a>
+            {% else %}
+              <a href="{{ url_for('extract_video', mid=m.id) }}" class="btn-action">Extract</a>
+            {% endif %}
+            <a href="{{ url_for('stego_download', mid=m.id) }}" class="btn-download">Download</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-box">
+      <p>No messages found.</p>
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .inbox-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .inbox-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 0.25rem;
+  }
+
+  .inbox-subtitle {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .inbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .inbox-item {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.04);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .inbox-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(0,0,0,0.06);
+  }
+
+  .inbox-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .type-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    border-radius: 0.4rem;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .type-tag.image { background-color: #2563eb; }
+  .type-tag.audio { background-color: #10b981; }
+  .type-tag.video { background-color: #f59e0b; }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .file-name {
+    font-weight: 500;
+    color: #111827;
+  }
+
+  .sender {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-action, .btn-download {
+    padding: 0.45rem 0.9rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.1s ease;
+  }
+
+  .btn-action {
+    background: #2563eb;
+    color: white;
+  }
+
+  .btn-action:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .btn-download {
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  .btn-download:hover {
+    background: #d1d5db;
+    transform: translateY(-1px);
+  }
+
+  .empty-box {
+    background: #f9fafb;
+    border: 1px dashed #d1d5db;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 640px) {
+    .inbox-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+</style>
+{% endblock %}
