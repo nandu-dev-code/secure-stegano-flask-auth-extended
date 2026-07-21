@@ -5,6 +5,6 @@ PyMySQL==1.1.0
 cryptography==43.0.1
 Pillow==10.4.0
 soundfile==0.12.1
-opencv-python==4.8.0.76
-numpy==1.25.2
+opencv-python-headless==4.10.0.84
+numpy==1.26.4
 qrcode==7.4.2
