@@ -19,8 +19,15 @@ import soundfile as sf
 
 # (If you use any video libs elsewhere, keep them; this file uses simple trailer method for video)
 # App config - keep your MySQL URI here (unchanged from your original)
-DB_URI = os.environ.get("DATABASE_URL") or "mysql+pymysql://root:nandu15nandu2005@localhost/stegano_db"
-SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-secret-key"
+
+DB_URI = (
+    f"mysql+pymysql://"
+    f"{os.environ['MYSQL_USER']}:"
+    f"{os.environ['MYSQL_PASSWORD']}@"
+    f"{os.environ['MYSQL_HOST']}:"
+    f"{os.environ.get('MYSQL_PORT', '3306')}/"
+    f"{os.environ['MYSQL_DATABASE']}"
+)
 
 UPLOAD_FOLDER = "uploads"
 STEGO_FOLDER = "stego_store"
