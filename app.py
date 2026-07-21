@@ -284,13 +284,14 @@ def embed_image():
             flash("Receiver not found")
             return redirect(url_for("embed_image"))
 
-       # generate a unique token (to embed in QR)
-    token = secrets.token_urlsafe(12)
+        # generate a unique token (to embed in QR)
+        token = secrets.token_urlsafe(12)
 
-    # Generate URL for the QR code
-    base_url = request.host_url.rstrip("/")
-    qr_url = f"{base_url}/view/{token}"
-        # 1) generate QR bytes from the QR URL (so scanning opens /view/<token>)
+        # Generate URL for the QR code
+        base_url = request.host_url.rstrip("/")
+        qr_url = f"{base_url}/view/{token}"
+
+        # 1) generate QR bytes
         try:
             qr_bytes = generate_qr_bytes(qr_url)
         except Exception as e:
