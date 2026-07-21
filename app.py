@@ -32,8 +32,10 @@ DB_URI = (
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-UPLOAD_FOLDER = "uploads"
-STEGO_FOLDER = "stego_store"
+import tempfile
+
+UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), "uploads")
+STEGO_FOLDER = os.path.join(tempfile.gettempdir(), "stego_store")
 ALLOWED_IMAGE = {"png","jpg","jpeg","bmp"}
 ALLOWED_AUDIO = {"wav"}
 ALLOWED_VIDEO = {"mp4","avi"}
