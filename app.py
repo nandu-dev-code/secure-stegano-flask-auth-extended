@@ -21,13 +21,16 @@ import soundfile as sf
 # App config - keep your MySQL URI here (unchanged from your original)
 
 DB_URI = (
-    f"mysql+pymysql://"
-    f"{os.environ['MYSQL_USER']}:"
-    f"{os.environ['MYSQL_PASSWORD']}@"
-    f"{os.environ['MYSQL_HOST']}:"
-    f"{os.environ.get('MYSQL_PORT', '3306')}/"
-    f"{os.environ['MYSQL_DATABASE']}"
+    os.environ.get("DATABASE_URL")
+    or f"mysql+pymysql://"
+       f"{os.environ.get('MYSQL_USER')}:"
+       f"{os.environ.get('MYSQL_PASSWORD')}@"
+       f"{os.environ.get('MYSQL_HOST')}:"
+       f"{os.environ.get('MYSQL_PORT', '3306')}/"
+       f"{os.environ.get('MYSQL_DATABASE')}"
 )
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 UPLOAD_FOLDER = "uploads"
 STEGO_FOLDER = "stego_store"
@@ -285,9 +288,8 @@ def embed_image():
         token = secrets.token_urlsafe(12)
 
         # ✅ get your local IP dynamically so QR works on phone
-        import socket
-        local_ip = socket.gethostbyname(socket.gethostname())
-        qr_url = f"http://{local_ip}:5000/view/{token}"
+       base_url = request.host_url.rstrip("/")
+       qr_url = f"{base_url}/view/{token}"
         # 1) generate QR bytes from the QR URL (so scanning opens /view/<token>)
         try:
             qr_bytes = generate_qr_bytes(qr_url)
