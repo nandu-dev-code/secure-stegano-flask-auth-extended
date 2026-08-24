@@ -20,27 +20,49 @@ import soundfile as sf
 # (If you use any video libs elsewhere, keep them; this file uses simple trailer method for video)
 # App config - keep your MySQL URI here (unchanged from your original)
 
-DB_URI = (
-    os.environ.get("DATABASE_URL")
-    or f"mysql+pymysql://"
-       f"{os.environ.get('MYSQL_USER')}:"
-       f"{os.environ.get('MYSQL_PASSWORD')}@"
-       f"{os.environ.get('MYSQL_HOST')}:"
-       f"{os.environ.get('MYSQL_PORT', '3306')}/"
-       f"{os.environ.get('MYSQL_DATABASE')}"
-)
+DB_URI = os.environ.get("DATABASE_URL")
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
+if not DB_URI:
+    mysql_user = os.environ.get("MYSQL_USER")
+    mysql_password = os.environ.get("MYSQL_PASSWORD")
+    mysql_host = os.environ.get("MYSQL_HOST")
+    mysql_port = os.environ.get("MYSQL_PORT", "3306")
+    mysql_database = os.environ.get("MYSQL_DATABASE")
 
-import tempfile
+    if all([mysql_user, mysql_password, mysql_host, mysql_database]):
+        DB_URI = (
+            f"mysql+pymysql://{mysql_user}:{mysql_password}"
+            f"@{mysql_host}:{mysql_port}/{mysql_database}"
+        )
+    else:
+        raise RuntimeError(
+            "Database configuration is missing. "
+            "Set DATABASE_URL or MYSQL_USER, MYSQL_PASSWORD, "
+            "MYSQL_HOST, MYSQL_PORT and MYSQL_DATABASE."
+        )
+
+SECRET_KEY = os.environ.get("SECRET_KEY")
+
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY environment variable is missing.")
+
+# -----------------------
+# Temporary File Storage
+# -----------------------
 
 UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), "uploads")
 STEGO_FOLDER = os.path.join(tempfile.gettempdir(), "stego_store")
-ALLOWED_IMAGE = {"png","jpg","jpeg","bmp"}
+
+ALLOWED_IMAGE = {"png", "jpg", "jpeg", "bmp"}
 ALLOWED_AUDIO = {"wav"}
-ALLOWED_VIDEO = {"mp4","avi"}
+ALLOWED_VIDEO = {"mp4", "avi"}
+
+# -----------------------
+# Flask Configuration
+# -----------------------
 
 app = Flask(__name__)
+
 app.config.update(
     SECRET_KEY=SECRET_KEY,
     SQLALCHEMY_DATABASE_URI=DB_URI,
