@@ -86,9 +86,6 @@ class TransferHistory(db.Model):
 
 with app.app_context():
     db.create_all()
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    os.makedirs(STEGO_FOLDER, exist_ok=True)
-
 @login_manager.user_loader
 def load_user(uid): return User.query.get(int(uid))
 
