@@ -1,10 +1,11 @@
 Flask==3.0.3
 Flask-Login==0.6.3
 Flask-SQLAlchemy==3.1.1
-PyMySQL==1.1.0
+psycopg2-binary==2.9.9
 cryptography==43.0.1
 Pillow==10.4.0
 soundfile==0.12.1
 opencv-python-headless==4.10.0.84
 numpy==1.26.4
 qrcode==7.4.2
+gunicorn==23.0.0
